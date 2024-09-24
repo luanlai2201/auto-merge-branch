@@ -52,7 +52,7 @@ jobs:
           commit-message: "Merge main into develop"
           title: "Merge main into develop"
           body: "Auto-merge failed. Please resolve the conflict and merge main into develop."
-          branch: auto-pr/main-to-developer
+          branch: ${{ github.ref }}
           base: develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
