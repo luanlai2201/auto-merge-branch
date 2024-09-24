@@ -47,7 +47,7 @@ jobs:
           commit-message: "Merge main into develop"
           title: "Merge main into develop"
           body: "Auto-merge failed. Please resolve the conflict and merge main into develop."
-          branch: main
+          branch: auto-pr/main-to-developer
           base: develop
           labels: auto-merge
           assignees: ${{ github.actor }}
