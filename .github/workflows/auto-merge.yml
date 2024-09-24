@@ -36,13 +36,13 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Reset to nearest commit of develop and checkout to main
-        if: failure()
-        run: |
-          git reset --hard origin/develop
-          git checkout main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Reset to nearest commit of develop and checkout to main
+      #   if: failure()
+      #   run: |
+      #     git reset --hard origin/develop
+      #     git checkout main
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create a pull request if fail
         if: failure()
@@ -54,9 +54,5 @@ jobs:
           body: "Auto-merge failed. Please resolve the conflict and merge main into develop."
           branch: auto-pr/main-to-developer
           base: develop
-          labels: auto-merge
-          assignees: ${{ github.actor }}
-          reviewers: ${{ github.actor }}
-          draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
