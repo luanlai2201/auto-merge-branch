@@ -20,6 +20,11 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
+      # - name: Return error
+      #   run: |
+      #     echo "Error: Merge conflict detected"
+      #     exit 1
+
       - name: Merge main into develop
         run: |
           git checkout develop
@@ -31,6 +36,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Reset to nearest commit of develop and checkout to main
+        if: failure()
+        run: |
+          git reset --hard origin/develop
+          git checkout main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create a pull request if fail
         if: failure()
         uses: peter-evans/create-pull-request@v7
@@ -39,11 +52,7 @@ jobs:
           commit-message: "Merge main into develop"
           title: "Merge main into develop"
           body: "Auto-merge failed. Please resolve the conflict and merge main into develop."
-          branch: main
+          branch: ${{ github.ref }}
           base: develop
-          labels: auto-merge
-          assignees: ${{ github.actor }}
-          reviewers: ${{ github.actor }}
-          draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
