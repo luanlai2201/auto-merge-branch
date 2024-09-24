@@ -31,6 +31,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Reset to nearest commit of develop and checkout to main
+        if: failure()
+        run: |
+          git reset --hard origin/develop
+          git checkout main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create a pull request if fail
         if: failure()
         uses: peter-evans/create-pull-request@v7
