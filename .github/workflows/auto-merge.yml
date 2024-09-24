@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Git
         run: |
@@ -23,11 +23,22 @@ jobs:
 
       - name: Merge main into develop
         run: |
+          git pull origin main --allow-unrelated-histories
           git checkout develop
           if ! git merge main; then
             echo "Error: Merge conflict detected"
             exit 1
           fi
           git push origin develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a pull request if fail
+        if: failure()
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Error: Merge conflict detected"
+            exit 1
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
