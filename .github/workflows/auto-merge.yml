@@ -20,16 +20,21 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Merge main into develop
+      - name: Return error
         run: |
-          git checkout develop
-          if ! git merge main; then
-            echo "Error: Merge conflict detected"
-            exit 1
-          fi
-          git push origin develop
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Error: Merge conflict detected"
+          exit 1
+
+      # - name: Merge main into develop
+      #   run: |
+      #     git checkout develop
+      #     if ! git merge main; then
+      #       echo "Error: Merge conflict detected"
+      #       exit 1
+      #     fi
+      #     git push origin develop
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Reset to nearest commit of develop and checkout to main
         if: failure()
