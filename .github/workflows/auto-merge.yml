@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  DEVELOP_BRANCH: develop
+
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
@@ -27,19 +30,19 @@ jobs:
 
       - name: Merge main into develop
         run: |
-          git checkout develop
+          git checkout $DEVELOP_BRANCH
           if ! git merge main; then
             echo "Error: Merge conflict detected"
             exit 1
           fi
-          git push origin develop
+          git push origin $DEVELOP_BRANCH
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Reset to nearest commit of develop and checkout to main
         if: failure()
         run: |
-          git reset --hard origin/develop
+          git reset --hard origin/$DEVELOP_BRANCH
           git checkout main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,6 +56,6 @@ jobs:
           title: "Merge main into develop"
           body-path: .github/PULL_REQUEST_TEMPLATE.md
           branch: ${{ github.ref }}
-          base: develop
+          base: ${{ env.DEVELOP_BRANCH }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
