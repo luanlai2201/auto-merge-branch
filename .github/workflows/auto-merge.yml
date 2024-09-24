@@ -22,7 +22,6 @@ jobs:
 
       - name: Merge main into develop
         run: |
-          git pull origin main --allow-unrelated-histories
           git checkout develop
           if ! git merge main; then
             echo "Error: Merge conflict detected"
