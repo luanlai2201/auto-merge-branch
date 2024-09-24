@@ -34,10 +34,17 @@ jobs:
 
       - name: Create a pull request if fail
         if: failure()
-        run: |
-          if [ $? -ne 0 ]; then
-            echo "Error: Merge conflict detected"
-            exit 1
-          fi
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Merge main into develop"
+          title: "Merge main into develop"
+          body: "Auto-merge failed. Please resolve the conflict and merge main into develop."
+          branch: main
+          base: develop
+          labels: auto-merge
+          assignees: ${{ github.actor }}
+          reviewers: ${{ github.actor }}
+          draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
