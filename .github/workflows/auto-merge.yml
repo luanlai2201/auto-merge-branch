@@ -31,7 +31,7 @@ jobs:
       - name: Merge main into develop
         run: |
           git checkout $DEVELOP_BRANCH
-          if ! git merge main; then
+          if ! git merge main --no-edit; then
             echo "Error: Merge conflict detected"
             exit 1
           fi
