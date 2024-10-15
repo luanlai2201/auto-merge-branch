@@ -49,6 +49,7 @@ jobs:
 
       - name: Read PR Template
         if: failure()
+        shell: bash
         id: read_pr_template
         run: |
           PR_TEMPLATE_PATH=".github/PULL_REQUEST_TEMPLATE.md"
