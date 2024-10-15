@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
-        id: create_pr
+        if: failure()
         run: |
           # Data for the PR creation
           PR_TITLE="Auto PR: Update from GitHub Actions"
