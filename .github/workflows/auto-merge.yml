@@ -44,20 +44,21 @@ jobs:
         run: |
           git reset --hard origin/$DEVELOP_BRANCH
           git checkout main
-          git checkout -b temp-branch
-          git push origin temp-branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create a pull request if fail
-        if: failure()
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Merge main into develop"
-          title: "Merge main into develop"
-          body-path: .github/PULL_REQUEST_TEMPLATE.md
-          branch: temp-branch
-          base: ${{ env.DEVELOP_BRANCH }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        id: create_pr
+        run: |
+          # Data for the PR creation
+          PR_TITLE="Auto PR: Update from GitHub Actions"
+          PR_BODY="This PR was created automatically by GitHub Actions."
+          BRANCH_NAME="develop"
+          BASE_BRANCH="main"
+
+          # Make the API request
+          curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/pulls \
+          -d "{\"title\":\"$PR_TITLE\", \"body\":\"$PR_BODY\", \"head\":\"$BRANCH_NAME\", \"base\":\"$BASE_BRANCH\"}"
