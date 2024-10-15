@@ -44,6 +44,7 @@ jobs:
         run: |
           git reset --hard origin/$DEVELOP_BRANCH
           git checkout main
+          git checkout -b temp-branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,8 +56,7 @@ jobs:
           commit-message: "Merge main into develop"
           title: "Merge main into develop"
           body-path: .github/PULL_REQUEST_TEMPLATE.md
-          branch: ${{ github.ref }}
+          branch: temp-branch
           base: ${{ env.DEVELOP_BRANCH }}
-          branch-suffix: short-commit-hash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
