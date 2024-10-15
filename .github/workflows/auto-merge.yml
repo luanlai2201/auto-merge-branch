@@ -43,6 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Read PR Template
+        if: failure()
         id: read_pr_template
         run: |
           PR_TEMPLATE_PATH=".github/PULL_REQUEST_TEMPLATE.md"
@@ -56,6 +57,7 @@ jobs:
           echo "::set-output name=PR_BODY::$PR_BODY"
 
       - name: Check for existing PR and create/update PR
+        if: failure()
         id: create_or_update_pr
         run: |
           BRANCH_NAME="main"
@@ -88,6 +90,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Confirm PR Action
+        if: failure()
         run: |
           if [ "${{ steps.create_or_update_pr.outputs.PR_EXISTING_ID }}" != "" ]; then
             echo "Pull request has been updated!"
