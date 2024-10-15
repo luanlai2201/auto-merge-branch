@@ -53,8 +53,8 @@ jobs:
           # Data for the PR creation
           PR_TITLE="Auto PR: Update from GitHub Actions"
           PR_BODY="This PR was created automatically by GitHub Actions."
-          BRANCH_NAME="develop"
-          BASE_BRANCH="main"
+          BRANCH_NAME="main"
+          BASE_BRANCH="develop"
 
           # Make the API request
           curl -X POST \
