@@ -45,6 +45,7 @@ jobs:
           git reset --hard origin/$DEVELOP_BRANCH
           git checkout main
           git checkout -b temp-branch
+          git push origin temp-branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
