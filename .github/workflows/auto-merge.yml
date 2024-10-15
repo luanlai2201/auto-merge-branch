@@ -47,29 +47,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Read PR Template
-        if: failure()
-        shell: bash
-        id: read_pr_template
-        run: |
-          PR_TEMPLATE_PATH=".github/PULL_REQUEST_TEMPLATE.md"
-          if [ -f "$PR_TEMPLATE_PATH" ]; then
-            PR_BODY=$(cat $PR_TEMPLATE_PATH)
-            echo "PR_BODY<<EOF" >> $GITHUB_ENV
-            echo "$PR_BODY" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          else
-            echo "PULL_REQUEST_TEMPLATE.md not found."
-            echo "PR_BODY<<EOF" >> $GITHUB_ENV
-            echo "No PR template provided." >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-
       - name: Create Pull Request
         if: failure()
         run: |
+
+          # Define file path for PR template
+          PR_TEMPLATE_PATH=".github/PULL_REQUEST_TEMPLATE.md"
+
+          # Check if the file exists
+          if [ -f "$PR_TEMPLATE_PATH" ]; then
+            echo "Reading the PR template from $PR_TEMPLATE_PATH"
+            PR_BODY=$(cat $PR_TEMPLATE_PATH) # Read the content of the template
+          else
+            echo "PR template not found, using a default PR body"
+            PR_BODY="This is a default PR body because no template was found."
+          fi
           # Data for the PR creation
           PR_TITLE="Auto PR: Update from GitHub Actions"
-          PR_BODY="${{ env.PR_BODY }}"
           BRANCH_NAME="main"
           BASE_BRANCH="develop"
 
